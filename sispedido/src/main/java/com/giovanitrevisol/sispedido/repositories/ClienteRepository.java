@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
-    ///somento com isso o Spring ja intende que é para fazer uma busca por email
+    ///somente com isso o Spring ja entende que é para fazer uma busca por email
     ///sempre usar findBy + nome do campo no domain
     @Transactional(readOnly = true)
     Cliente findByEmail(String email);
