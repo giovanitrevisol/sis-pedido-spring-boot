@@ -1,10 +1,9 @@
 package com.giovanitrevisol.sispedido.resources;
 
-import com.giovanitrevisol.sispedido.domain.Categoria;
 import com.giovanitrevisol.sispedido.domain.Pedido;
-import com.giovanitrevisol.sispedido.dto.CategoriaDTO;
 import com.giovanitrevisol.sispedido.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -34,5 +33,15 @@ public class PedidoResource {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         //este metodo a cima retorna a URI com o ID do objeto inserido
         return ResponseEntity.created(uri).build();
+    }
+
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<Page<Pedido>> findPage(
+            @RequestParam(value="page", defaultValue="0") Integer page,
+            @RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage,
+            @RequestParam(value="orderBy", defaultValue="instante") String orderBy,
+            @RequestParam(value="direction", defaultValue="DESC") String direction) {
+        Page<Pedido> list = service.findPage(page, linesPerPage, orderBy, direction);
+        return ResponseEntity.ok().body(list);
     }
 }

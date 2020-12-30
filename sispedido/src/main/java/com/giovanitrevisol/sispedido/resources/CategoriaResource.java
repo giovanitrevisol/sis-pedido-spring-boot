@@ -63,7 +63,6 @@ public class CategoriaResource {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<List<CategoriaDTO>> findAll() {
         List<Categoria> list = service.findAll();
         //converter esta lista de outra forma - 37

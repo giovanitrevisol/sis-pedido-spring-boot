@@ -1,16 +1,19 @@
 package com.giovanitrevisol.sispedido.services;
 
-import com.giovanitrevisol.sispedido.domain.ItemPedido;
-import com.giovanitrevisol.sispedido.domain.PagamentoComBoleto;
-import com.giovanitrevisol.sispedido.domain.Pedido;
-import com.giovanitrevisol.sispedido.domain.Produto;
+import com.giovanitrevisol.sispedido.domain.*;
 import com.giovanitrevisol.sispedido.domain.enums.EstadoPagamento;
 import com.giovanitrevisol.sispedido.repositories.ItemPedidoRepository;
 import com.giovanitrevisol.sispedido.repositories.PagamentoRepository;
 import com.giovanitrevisol.sispedido.repositories.PedidoRepository;
 import com.giovanitrevisol.sispedido.repositories.ProdutoRepository;
+import com.giovanitrevisol.sispedido.security.UserSS;
+import org.springframework.data.domain.Sort.Direction;
+import com.giovanitrevisol.sispedido.services.exception.AuthorizationException;
 import com.giovanitrevisol.sispedido.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -71,5 +74,16 @@ public class PedidoService {
         //emailService.sendOrderConfirmationEmail(obj); --- texto plano
         emailService.sendOrderConfirmationHtmlEmail(obj); // email estilo
         return obj;
+    }
+
+    public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        UserSS user = UserService.authenticated();
+        if (user == null) {
+            throw new AuthorizationException("Acesso negado");
         }
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+        Cliente cliente =  clienteService.find(user.getId());
+        return repo.findByCliente(cliente, pageRequest);
+    }
+
 }

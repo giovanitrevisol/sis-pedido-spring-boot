@@ -33,6 +33,11 @@ public class ClienteResource {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping(value = "/email")
+    public ResponseEntity<Cliente> find(@RequestParam(value="value") String email) {
+        Cliente obj = service.findByEmail(email);
+        return ResponseEntity.ok().body(obj);
+    }
 
     @PostMapping
     public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){
@@ -43,8 +48,6 @@ public class ClienteResource {
         return ResponseEntity.created(uri).build();
     }
 
-
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id){
         Cliente obj = service.fromDTO(objDto);

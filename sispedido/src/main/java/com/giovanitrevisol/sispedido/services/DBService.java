@@ -114,8 +114,8 @@ public class DBService {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
-        Pedido ped1 = new Pedido(null, sdf.parse("30/09/2020 10:32"), cli1, e1);
-        Pedido ped2 = new Pedido(null, sdf.parse("10/10/2020 19:35"), cli1, e2);
+        Pedido ped1 = new Pedido(null, sdf.parse("30/09/2020 10:32"), cli2, e1);
+        Pedido ped2 = new Pedido(null, sdf.parse("10/10/2020 19:35"), cli2, e2);
 
         Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
         ped1.setPagamento(pagto1);
