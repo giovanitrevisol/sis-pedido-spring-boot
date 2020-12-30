@@ -1,6 +1,8 @@
 package com.giovanitrevisol.sispedido.config;
 
 import com.giovanitrevisol.sispedido.services.DBService;
+import com.giovanitrevisol.sispedido.services.EmailService;
+import com.giovanitrevisol.sispedido.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,5 +29,10 @@ public class DevConfig {
         }
         dbService.instantiateTestDataBase();
         return true;
+    }
+
+    @Bean
+    public EmailService emailService(){
+        return new SmtpEmailService() ;
     }
 }
