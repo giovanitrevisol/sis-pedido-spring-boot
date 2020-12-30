@@ -1,23 +1,24 @@
 package com.giovanitrevisol.sispedido.services;
 
-import com.giovanitrevisol.sispedido.domain.Categoria;
 import com.giovanitrevisol.sispedido.domain.Cidade;
 import com.giovanitrevisol.sispedido.domain.Cliente;
 import com.giovanitrevisol.sispedido.domain.Endereco;
+import com.giovanitrevisol.sispedido.domain.enums.Perfil;
 import com.giovanitrevisol.sispedido.domain.enums.TipoCliente;
-import com.giovanitrevisol.sispedido.dto.CategoriaDTO;
 import com.giovanitrevisol.sispedido.dto.ClienteDTO;
 import com.giovanitrevisol.sispedido.dto.ClienteNewDTO;
 import com.giovanitrevisol.sispedido.repositories.ClienteRepository;
 import com.giovanitrevisol.sispedido.repositories.EnderecoRepository;
+import com.giovanitrevisol.sispedido.security.UserSS;
+import com.giovanitrevisol.sispedido.services.exception.AuthorizationException;
 import com.giovanitrevisol.sispedido.services.exception.DataIntegrateException;
 import com.giovanitrevisol.sispedido.services.exception.ObjectNotFoundException;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,11 @@ public class ClienteService {
     private BCryptPasswordEncoder pe;
 
     public Cliente find(Integer id) {
+        UserSS user = UserService.authenticated();
+        if(user == null || !user.hasRole(Perfil.ADMIN) && id.equals(user.getId()) ){
+            throw new AuthorizationException("Acesso negado");
+        }
+
         Optional<Cliente> obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
                 "Cliente não encontrado!!! - Id: " + id + ", Tipo: " + Cliente.class.getName()));

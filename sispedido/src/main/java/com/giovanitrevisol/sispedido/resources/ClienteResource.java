@@ -11,6 +11,7 @@ import com.giovanitrevisol.sispedido.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -43,6 +44,7 @@ public class ClienteResource {
     }
 
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id){
         Cliente obj = service.fromDTO(objDto);
@@ -51,6 +53,7 @@ public class ClienteResource {
         return ResponseEntity.noContent().build();
     }
     //metodo para atualizar uma Cliente exixtente
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id){
         service.delete(id);
@@ -58,6 +61,7 @@ public class ClienteResource {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<List<ClienteDTO>> findAll() {
         List<Cliente> list = service.findAll();
         //converter esta lista de outra forma - 37
@@ -68,6 +72,7 @@ public class ClienteResource {
     //nesta funcao os parametros são passados como parâmetros
     // - /Clientes/page?page=0&lineperpage=20...
     @GetMapping(value = "/page")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Page<ClienteDTO>> findPage(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,

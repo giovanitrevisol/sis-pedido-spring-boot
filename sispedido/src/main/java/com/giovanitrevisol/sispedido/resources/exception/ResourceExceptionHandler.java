@@ -1,5 +1,6 @@
 package com.giovanitrevisol.sispedido.resources.exception;
 
+import com.giovanitrevisol.sispedido.services.exception.AuthorizationException;
 import com.giovanitrevisol.sispedido.services.exception.DataIntegrateException;
 import com.giovanitrevisol.sispedido.services.exception.ObjectNotFoundException;
 
@@ -34,5 +35,11 @@ public class ResourceExceptionHandler {
             err.addError(x.getField(), x.getDefaultMessage());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandartError> objectNotFound(AuthorizationException e, HttpServerErrorException request) {
+        StandartError err = new StandartError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
 }
