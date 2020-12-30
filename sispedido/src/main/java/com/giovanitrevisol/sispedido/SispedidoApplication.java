@@ -15,3 +15,6 @@ public class SispedidoApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 	}
 }
+
+//testar o swagger
+//Testar: http://localhost:8080/swagger-ui.html
