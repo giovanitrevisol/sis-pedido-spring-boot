@@ -4,6 +4,7 @@ import com.giovanitrevisol.sispedido.domain.Categoria;
 import com.giovanitrevisol.sispedido.dto.CategoriaDTO;
 import com.giovanitrevisol.sispedido.services.CategoriaService;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class CategoriaResource {
     // caminho para acessar = http://localhost:8080/categorias
     // @RequestMapping(method = RequestMethod.GET)
 
-
+    @ApiOperation(value="Busca por id") //usado pel swagger
     @GetMapping(value = "/{id}")
     public ResponseEntity<Categoria> find(@PathVariable Integer id) {
         Categoria obj = service.find(id);
